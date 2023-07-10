@@ -1,7 +1,7 @@
 ######################################################################################################################################################
-#                                               Name: Model_GPT                                                                                      #
+#                                               Name: Model_nanollama                                                                                #
 #                                               Comments Author: Devin Wu                                                                            #
-#                                               Date: Jul, 6, 2023 11:05AM                                                                           #
+#                                               Date: Jul, 10, 2023 7:40PM                                                                           #
 #                                               Ref: http://pointborn.com/article/2022/2/18/1820.html                                                #
 #                                                    https://blog.csdn.net/Mikeyboi/article/details/119522689                                        #
 #                                                                                                                                                    #
@@ -13,22 +13,8 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-def gelu(x):
-    return 0.5 * x * (1.0 + torch.tanh(math.sqrt(2.0 / math.pi) * (x + 0.044715 * torch.pow(x, 3.0))))
-
 def relu(x):
     return x if x > 0 else 0
-
-class LayerNorm(nn.Module):
-    def __init__(self, ndim, bias):
-        super().__init__()
-        # 初始化权重，标准化公式x_hat = x-u/根号下方差a^2-epsilon加入可学习参数，变成 output = alpha * x_hat + beta, 其中alpha相当于权重，beta相当于偏置。
-        self.weight = nn.Parameter(torch.ones(ndim))
-        self.bias = nn.Parameter(torch.zeros(ndim)) if bias else None
-
-    def forward(self, input):
-        # F.layer_norm(x, normalized_shape, self.weight.expand(normalized_shape)--自定义的weight, self.bias.expand(normalized_shape))--自定义的bias
-        return F.layer_norm(input, self.weight.shape, self.weight, self.bias, 1e-5)
 
 # Root Mean Squra Normalization，Llama开源代码实现
 class RMSNorm(nn.Module):
@@ -87,7 +73,6 @@ class RotaryPositionalEmbeddings(nn.Module):
         x_rope = (x_rope * self.cos_cached[:x.shape[2]]) + (neg_half_x * self.sin_cached[:x.shape[2]])
         # 最后把有apply RoPE的和没有apply的feature组合起来
         return torch.cat((x_rope, x_pass), dim=-1)
-    
 
 class CausalSelfAttention(nn.Module):
     def __init__(self,config):
@@ -133,7 +118,6 @@ class CausalSelfAttention(nn.Module):
         # 输出y过线性层再dropout，最后return出去
         y = self.resid_dropout(self.c_proj(y))
         return y
-
 
 class MLP(nn.Module):
     def __init__(self, config):
