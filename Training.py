@@ -1,7 +1,7 @@
 ######################################################################################################################################################
-#                                               Name: Training_GPT                                                                                   #
+#                                               Name: Training_nanollama                                                                                   #
 #                                               Comment Author: Devin Wu                                                                             #
-#                                               Date: Jul, 5, 2023 10:25AM                                                                           #
+#                                               Date: Jul, 10, 2023 10:25PM                                                                           #
 #                                               Ref: http://pointborn.com/article/2022/2/18/1820.html                                                #
 #                                                    https://blog.csdn.net/Mikeyboi/article/details/119522689                                        #
 #                                                                                                                                                    #
